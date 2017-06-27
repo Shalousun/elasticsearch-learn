@@ -2,9 +2,9 @@ package com.sunyu.elastic;
 
 
 import org.elasticsearch.client.Client;
+import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
-import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,15 +30,35 @@ public class EsConfig {
     @Value("${elasticsearch.clustername}")
     private String EsClusterName;
 
+    /**
+     * for elasticsearch 5.x
+     * @return
+     * @throws Exception
+     */
+//    @Bean
+//    public Client client() throws Exception {
+//
+//        Settings esSettings = Settings.builder()
+//                .put("cluster.name", EsClusterName)
+//                .build();
+//
+//        //https://www.elastic.co/guide/en/elasticsearch/guide/current/_transport_client_versus_node_client.html
+//        return new PreBuiltTransportClient(esSettings)
+//                .addTransportAddress(
+//                        new InetSocketTransportAddress(InetAddress.getByName(EsHost), EsPort));
+//    }
+
     @Bean
     public Client client() throws Exception {
 
-        Settings esSettings = Settings.builder()
+        Settings esSettings = Settings.settingsBuilder()
                 .put("cluster.name", EsClusterName)
                 .build();
 
         //https://www.elastic.co/guide/en/elasticsearch/guide/current/_transport_client_versus_node_client.html
-        return new PreBuiltTransportClient(esSettings)
+        return TransportClient.builder()
+                .settings(esSettings)
+                .build()
                 .addTransportAddress(
                         new InetSocketTransportAddress(InetAddress.getByName(EsHost), EsPort));
     }
