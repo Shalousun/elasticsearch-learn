@@ -48,6 +48,11 @@ public class EsConfig {
 //                        new InetSocketTransportAddress(InetAddress.getByName(EsHost), EsPort));
 //    }
 
+    /**
+     * for elasticsearch 2.x
+     * @return
+     * @throws Exception
+     */
     @Bean
     public Client client() throws Exception {
 
