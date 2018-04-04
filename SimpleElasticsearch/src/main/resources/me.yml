@@ -1,0 +1,57 @@
+filebeat:
+  registry_file: /var/lib/filebeat/registry
+  prospectors:
+    -
+      paths:
+        - /var/log/messages
+
+      input_type: log
+
+      document_type: messages
+################### 额外配置 ##############################
+      #只发送包含这些字样的日志
+      include_lines: ["^ERR", "^WARN"]
+      #不发送包含这些字样的日志
+      exclude_lines: ["^OK"]
+      # 超过 24 小时没更新内容的文
+      ignore_older: "24h"
+      #每 10 秒钟扫描一次目录，更新通配符匹配上的文件列表
+      scan_frequency: "10s"
+      #实际读取文件时，每次读取 16384 字节
+      harvester_buffer_size: 16384
+      #每 1 秒检测一次文件是否有新的一行内容需要读取
+      backoff: "1s"
+    -
+      paths:
+        - /alidata/log/nginx/access/access.log
+
+      input_type: log
+
+      document_type: nginxacclog
+
+      multiline:
+          pattern: '^[[:space:]]'
+          negate: true
+          match: after
+
+
+
+
+############################# Output ##########################################
+
+output:
+  logstash:
+    hosts: ["10.26.95.215:5044"]
+
+
+############################# Shipper #########################################
+
+#shipper:
+#  name: "host_6"
+
+
+############################# Logging #########################################
+
+#logging:
+#  files:
+#    rotateeverybytes: 10485760 # = 10MB

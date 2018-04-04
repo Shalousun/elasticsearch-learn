@@ -8,6 +8,7 @@
   <modules>
     <module>SpringBoot-Elasticsearch</module>
     <module>SimpleElasticsearch</module>
+    <module>ELKDemo</module>
   </modules>
   <packaging>pom</packaging>
 
