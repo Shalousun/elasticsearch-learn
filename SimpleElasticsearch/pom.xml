@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>SimpleElastsearch</artifactId>
+    <artifactId>SimpleElasticsearch</artifactId>
     <packaging>jar</packaging>
 
-    <name>SimpleElastsearch</name>
+    <name>SimpleElasticsearch</name>
     <url>http://maven.apache.org</url>
 
     <properties>
