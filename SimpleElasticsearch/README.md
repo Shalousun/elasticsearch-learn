@@ -5,3 +5,4 @@
  ```
  cluster.name: my-application
  ```
+支持elastic 5.x版本
