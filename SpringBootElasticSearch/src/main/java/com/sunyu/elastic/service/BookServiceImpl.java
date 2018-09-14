@@ -33,7 +33,7 @@ public class BookServiceImpl implements BookService {
     }
 
     public Book findOne(String id) {
-        return bookRepository.findOne(id);
+        return bookRepository.findById(id).get();
     }
 
     public Iterable<Book> findAll() {

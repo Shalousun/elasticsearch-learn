@@ -8,10 +8,26 @@ import org.springframework.data.elasticsearch.annotations.Document;
  */
 @Document(indexName = "mkyong", type = "books")
 public class Book {
+
+    /**
+     * 编号
+     */
     @Id
     private String id;
+
+    /**
+     * 书籍title
+     */
     private String title;
+
+    /**
+     * 作者
+     */
     private String author;
+
+    /**
+     * 出版时间
+     */
     private String releaseDate;
 
     public Book() {

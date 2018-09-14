@@ -1,10 +1,11 @@
-package com.sunyu.elastic;
+package com.sunyu.elastic.config;
 
 
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,8 +18,8 @@ import java.net.InetAddress;
 /**
  * Created by yu on 2017/6/24.
  */
-@Configuration
-@EnableElasticsearchRepositories(basePackages = "com.sunyu.elastic.repository")
+//@Configuration
+//@EnableElasticsearchRepositories(basePackages = "com.sunyu.elastic.repository")
 public class EsConfig {
 
     @Value("${elasticsearch.host}")
@@ -35,49 +36,23 @@ public class EsConfig {
      * @return
      * @throws Exception
      */
-//    @Bean
-//    public Client client() throws Exception {
-//
-//        Settings esSettings = Settings.builder()
-//                .put("cluster.name", EsClusterName)
-//                .build();
-//
-//        //https://www.elastic.co/guide/en/elasticsearch/guide/current/_transport_client_versus_node_client.html
-//        return new PreBuiltTransportClient(esSettings)
-//                .addTransportAddress(
-//                        new InetSocketTransportAddress(InetAddress.getByName(EsHost), EsPort));
-//    }
-
-    /**
-     * for elasticsearch 2.x
-     * @return
-     * @throws Exception
-     */
     @Bean
     public Client client() throws Exception {
 
-        Settings esSettings = Settings.settingsBuilder()
+        Settings esSettings = Settings.builder()
                 .put("cluster.name", EsClusterName)
                 .build();
-
         //https://www.elastic.co/guide/en/elasticsearch/guide/current/_transport_client_versus_node_client.html
-        return TransportClient.builder()
-                .settings(esSettings)
-                .build()
+        return new PreBuiltTransportClient(esSettings)
                 .addTransportAddress(
                         new InetSocketTransportAddress(InetAddress.getByName(EsHost), EsPort));
     }
 
 
-    @Bean
+
+   @Bean
     public ElasticsearchOperations elasticsearchTemplate() throws Exception {
         return new ElasticsearchTemplate(client());
     }
-
-    //Embedded Elasticsearch Server
-    /*@Bean
-    public ElasticsearchOperations elasticsearchTemplate() {
-        return new ElasticsearchTemplate(nodeBuilder().local(true).node().client());
-    }*/
 
 }
