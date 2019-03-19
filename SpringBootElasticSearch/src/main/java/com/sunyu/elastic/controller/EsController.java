@@ -4,10 +4,15 @@ import com.sunyu.elastic.model.Book;
 import com.sunyu.elastic.service.BookService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * es书籍数据操作
@@ -21,6 +26,8 @@ public class EsController {
     @Resource
     private BookService bookService;
 
+    @Resource
+    private ElasticsearchTemplate elasticsearchTemplate;
 
     /**
      * 添加书籍
@@ -66,5 +73,11 @@ public class EsController {
     public Page<Book> queryPage(@PathVariable int page, @PathVariable int size) {
         String author = "Rambabu Posa";
         return bookService.findByAuthor(author, PageRequest.of(page, size));
+    }
+
+    @RequestMapping("/singleWord/{page}/{size}")
+    public  Object singleTitle(String word, @PathVariable int page, @PathVariable int size) {
+        SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(queryStringQuery(word)).withPageable(PageRequest.of(page, size)).build();
+        return elasticsearchTemplate.queryForList(searchQuery, Book.class);
     }
 }
